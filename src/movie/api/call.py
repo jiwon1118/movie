@@ -37,9 +37,17 @@ def list2df(data : list , dt : str):
     
     return df
 
-def save_df(df : pd.DataFrame , base_path) -> str:
-    # list2df를 base_path에 파일로 저장
-    df.to_parquet(base_path, partition_cols=['dt'])
-    path = f"{base_path}/dt={df['dt'][0]}"
-    return path
 
+#def save_df(df, base_path, partition=['dt']):
+    # list2df를 base_path에 파일로 저장
+    #df.to_parquet(base_path, partition_cols=partition)
+    #save_path = f"{base_path}/dt={df['dt'][0]}"
+    #return save_path
+
+
+def save_df(df, base_path, partitions=['dt']):
+    df.to_parquet(base_path, partition_cols=partitions)
+    save_path = base_path
+    for p in partitions:
+        save_path = save_path + f"/{p}={df[p][0]}"
+    return save_path
