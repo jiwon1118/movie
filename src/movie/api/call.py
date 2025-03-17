@@ -22,12 +22,14 @@ def call_api(dt="20120101", url_param={}):
     return data['boxOfficeResult']["dailyBoxOfficeList"]
 
 
-def list2df(data : list , dt : str):
+def list2df(data : list , dt : str, url_param={}):
     l = call_api()
-    # TODO = list를 DataFrame으로 변환
     df = pd.DataFrame(l)
     df['dt'] = dt #도 가능 (맨 뒤에 생김)
     #df.insert(0, "dt", dt)
+    for k, v in url_param.items():
+        df[k] = v
+
     num_cols = ['rnum', 'rank', 'rankInten', 'salesAmt', 'audiCnt',
                 'audiAcc', 'scrnCnt', 'showCnt', 'salesShare', 'salesInten',
                 'salesChange', 'audiInten', 'audiChange']
@@ -36,13 +38,6 @@ def list2df(data : list , dt : str):
     # df[num_cols] = df[num_cols].apply(pd.to_numeric) - 이것도 가능
     
     return df
-
-
-#def save_df(df, base_path, partition=['dt']):
-    # list2df를 base_path에 파일로 저장
-    #df.to_parquet(base_path, partition_cols=partition)
-    #save_path = f"{base_path}/dt={df['dt'][0]}"
-    #return save_path
 
 
 def save_df(df, base_path, partitions=['dt']):

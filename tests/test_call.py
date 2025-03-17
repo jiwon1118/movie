@@ -32,7 +32,8 @@ def test_call_api():
 def test_list2df():
     ymd = "20210101"
     data = call_api(dt=ymd)
-    df = list2df(data, ymd)
+    url_param = {"MultiMovieYn": "Y"}
+    df = list2df(data, ymd, url_param)
     assert isinstance(df, pd.DataFrame)
     assert len(data) == len(df)
     assert set(data[0].keys()).issubset(set(df.columns))
@@ -50,6 +51,19 @@ def test_save_df():
     assert 'dt' not in read_df.columns
     assert 'dt' in pd.read_parquet(base_path).columns
     
+def test_save_df_url_param():
+    ymd = "20210101"
+    url_param = {"MultiMovieYn": "Y"}
+    base_path = "~/temp/movie"
+    
+    data = call_api(dt=ymd, url_param=url_param)
+    df = list2df(data, ymd, url_param)
+    partitons = ['dt'] + list(url_param.keys())
+    r = save_df(df, base_path, partitons)
+    assert r == f"{base_path}/dt={ymd}/MultiMovieYn=Y"
+    read_df = pd.read_parquet(r)
+    assert 'dt' not in read_df.columns
+    assert 'dt' in pd.read_parquet(base_path).columns
     
 def test_list2df_check_num():
     """df 에 숫자 컬럼을 변환 하고 잘 변환 되었는가 확인인"""
