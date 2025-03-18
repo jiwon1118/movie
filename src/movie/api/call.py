@@ -17,7 +17,7 @@ def gen_url(dt="20120101", url_param={}):
 
 
 def call_api(dt="20120101", url_param={}):
-    respond = requests.get(gen_url(dt, url_param={}))
+    respond = requests.get(gen_url(dt, url_param))
     data = respond.json()
     return data['boxOfficeResult']["dailyBoxOfficeList"]
 
