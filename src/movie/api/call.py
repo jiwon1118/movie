@@ -23,8 +23,7 @@ def call_api(dt="20120101", url_param={}):
 
 
 def list2df(data : list , dt : str, url_param={}):
-    l = call_api()
-    df = pd.DataFrame(l)
+    df = pd.DataFrame(data)
     df['dt'] = dt #도 가능 (맨 뒤에 생김)
     #df.insert(0, "dt", dt)
     for k, v in url_param.items():
