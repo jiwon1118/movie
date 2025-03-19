@@ -71,6 +71,13 @@ def re_ranking(df):
     return df
 
 
+def save_merge_df(df, dt):
+    save_path = f"/home/jiwon/data/movies/merge/dailyboxoffice/dt={dt}"
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    df.to_parquet(save_path, index=False)
+    return save_path
+
+
 def fill_unique_ranking(df: pd.DataFrame, dt:str) -> pd.DataFrame:
     df1 = fill_na_with_column(df, 'multiMovieYn')
     df2 = fill_na_with_column(df1, 'repNationCd')
