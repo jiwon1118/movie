@@ -25,6 +25,26 @@ def fillna_meta(previous_df: pd.DataFrame, current_df: pd.DataFrame) -> pd.DataF
     return(merged_df)
 
 
+def gen_meta(base_path, ds_nodash):
+        import os
+        
+        PATH = os.path.expanduser("~/data/movies/merge/dailyboxoffice/dt=")
+        save_path = f"{base_path}/meta/meta.parquet"
+        if not os.path.exists(f"{base_path}/meta"):
+            os.makedirs(f"{base_path}/meta")
+        else:
+            pass
+        
+        previous_df = read_df(save_path)
+        current_df = read_df(f"{PATH}{ds_nodash}")
+        
+        r_df = fillna_meta(previous_df, current_df)
+        # TODO f"{base_path}/meta/meta.parquet -> 경로로 저장
+        r_df.to_parquet(save_path)
+        
+        return(save_path)
+
+
 def save_gen(df: pd.DataFrame, parquet_path: str, partitions: list = []) -> str:
     os.makedirs(os.path.dirname(parquet_path), exist_ok=True)
 
