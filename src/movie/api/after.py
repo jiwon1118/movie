@@ -25,7 +25,7 @@ def fillna_meta(previous_df: pd.DataFrame, current_df: pd.DataFrame) -> pd.DataF
     return(merged_df)
 
 
-def save_meta(df: pd.DataFrame, parquet_path: str, partitions: list = []) -> str:
+def save_gen(df: pd.DataFrame, parquet_path: str, partitions: list = []) -> str:
     os.makedirs(os.path.dirname(parquet_path), exist_ok=True)
 
     if partitions:
