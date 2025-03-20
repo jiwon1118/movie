@@ -45,7 +45,7 @@ def save_df(df, base_path, partitions=['dt']):
     for p in partitions:
         save_path = save_path + f"/{p}={df[p][0]}"
     return save_path
-
+    
 
 def fill_na_with_column(origin_df, c_name):
     df = origin_df.copy()
@@ -64,10 +64,9 @@ def create_unique_ranked_df(df, drop_columns):
 
 
 def re_ranking(df):
-    # create_unique_ranked_df에서 중복을 제거한 후 순위 매기기  
     df = df.sort_values(by="audiCnt", ascending=False).reset_index(drop=True)
     df['rnum'] = df['audiCnt'].rank(ascending=False).astype(int)
-    df['rank'] = df['rnum']  # 'rnum'과 'rank'가 동일하도록 설정
+    df['rank'] = df['rnum']
     return df
 
 
@@ -85,4 +84,4 @@ def fill_unique_ranking(df: pd.DataFrame, dt:str) -> pd.DataFrame:
     unique_df = create_unique_ranked_df(df=df2, drop_columns=drop_columns)
     new_ranking_df = re_ranking(unique_df)
     new_ranking_df['dt'] = dt
-    return new_ranking_df
+    return new_ranking_df    
