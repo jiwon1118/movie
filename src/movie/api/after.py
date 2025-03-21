@@ -25,34 +25,27 @@ def fillna_meta(previous_df: pd.DataFrame, current_df: pd.DataFrame) -> pd.DataF
     return(merged_df)
 
 
-def gen_meta(base_path, ds_nodash):
-        import os
-        
-        PATH = os.path.expanduser("~/data/movies/merge/dailyboxoffice/dt=")
-        save_path = f"{base_path}/meta/meta.parquet"
-        if not os.path.exists(f"{base_path}/meta"):
-            os.makedirs(f"{base_path}/meta")
-        else:
-            pass
-        
-        previous_df = read_df(save_path)
-        current_df = read_df(f"{PATH}{ds_nodash}")
-        
-        r_df = fillna_meta(previous_df, current_df)
-        # TODO f"{base_path}/meta/meta.parquet -> 경로로 저장
-        r_df.to_parquet(save_path)
-        
-        return(save_path)
-
-
 def save_gen(df: pd.DataFrame, parquet_path: str, partitions: list = []) -> str:
     os.makedirs(os.path.dirname(parquet_path), exist_ok=True)
 
     if partitions:
-        df.to_parquet(parquet_path, partition_cols=partitions, index=False)
+        df.to_parquet(parquet_path, partition_cols=partitions)
     else:
-        df.to_parquet(parquet_path, index=False)
+        df.to_parquet(parquet_path)
 
     # 저장된 파일의 절대 경로 반환
     save_path = os.path.abspath(parquet_path)    
     return save_path
+
+# def save_with_mkdir(df: pd.DataFrame, parquet_path: str) -> str:
+#     """디렉토리가 없으면 생성하고, DataFrame을 parquet 파일로 저장한 후 경로 반환"""
+#     os.makedirs(os.path.dirname(parquet_path), exist_ok=True)
+    
+#     # DataFrame을 parquet 형식으로 저장
+#     df.to_parquet(parquet_path)
+    
+#     # 저장된 파일의 절대 경로 반환
+#     absolute_path = os.path.abspath(parquet_path)
+#     print(f"파일이 성공적으로 저장되었습니다: {absolute_path}")
+    
+#     return absolute_path
